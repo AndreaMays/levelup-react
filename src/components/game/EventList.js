@@ -8,6 +8,8 @@ export const EventList = (props) => {
         getEvents()
     }, [])
 
+    const dateTime = new Date().toISOString()
+
     return (
         <article className="events">
             <header className="events__header">
@@ -16,11 +18,11 @@ export const EventList = (props) => {
             {
                 events.map(event => {
                     return <section key={event.id} className="registration">
-                        <div className="registration__game">{event.game.title}</div>
-                        <div>{event.description}</div>
+                        <div className="registration__game">Game Name: {event.game.name_of_game}</div>
+                        <div>Game Description: {event.description}</div>
                         <div>
                             {
-                                new Date(event.date).toLocaleDateString("en-US",
+                                new Date(event.dateTime).toLocaleDateString("en-US",
                                 {
                                     weekday: 'long',
                                     year: 'numeric',
@@ -28,7 +30,7 @@ export const EventList = (props) => {
                                     day: 'numeric'
                                 })
                             }
-                            @ {event.time}
+                            @ {new Date(event.dateTime).toTimeString()}
                         </div>
                     </section>
                 })
