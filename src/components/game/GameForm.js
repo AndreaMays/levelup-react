@@ -19,15 +19,15 @@ export const GameForm = () => {
         maker: "",
         gameTypeId: 0
     })
-
     /*
-        Get game types on initialization so that the <select>
-        element presents game type choices to the user.
+    Get game types on initialization so that the <select>
+    element presents game type choices to the user.
     */
-    useEffect(() => {
-        getGameTypes()
+   useEffect(() => {
+       getGameTypes()
     }, [])
-
+    
+    console.log("Games", gameTypes)
     /*
         REFACTOR CHALLENGE START
 
@@ -65,6 +65,7 @@ export const GameForm = () => {
     const changeGameTypeState = (event) => {
         const newGameState = { ...currentGame }
         newGameState.gameTypeId = event.target.value
+        // debugger
         setCurrentGame(newGameState)
     }
     /* REFACTOR CHALLENGE END */
@@ -95,12 +96,12 @@ export const GameForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="game_type"></label>
-                    <select name="game_type"> onChange={changeGameTypeState}
+                    <select name="gameTypeId" onChange={changeGameTypeState}>
                         {
-                        gameTypes.map(game_type =>
-                            <option value={game_type.id}>Type of Game: {gameTypes.label}</option>
-                            )
-                        }
+                               gameTypes.map(game_type =>
+                                <option key={game_type.id} value={game_type.id}>Type of Game: {game_type.label}</option>
+                                )
+                            }
                     </select>
                 </div>
             </fieldset>

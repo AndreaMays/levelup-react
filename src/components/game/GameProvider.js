@@ -20,18 +20,18 @@ export const GameProvider = (props) => {
         return fetch("http://localhost:8000/games", {
             method: "POST", 
             headers: {
-                "Authorization": `Token ${localStorage.getItem("lu_token")}`
+                "Authorization": `Token ${localStorage.getItem("lu_token")}`,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(game)
         })
-            .then()
-            .then()
-    }
+            .then(setGames)
+        }
 
     const getGameTypes = () => {
         return fetch("http://localhost:8000/gametypes", { 
             headers: {
-                "Authorization": `Token${localStorage.getItem('lu_token')}`
+                "Authorization": `Token ${localStorage.getItem('lu_token')}`
             }
         })
             .then(res => res.json())
