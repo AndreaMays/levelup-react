@@ -4,13 +4,14 @@ import { EventContext } from "./EventProvider.js"
 
 
 export const EventList = (props) => {
-    const { events, getEvents } = useContext(EventContext)
+    const { getEvents, events } = useContext(EventContext)
     const history = useHistory()
 
     useEffect(() => {
         getEvents()
     }, [])
 
+    console.log("FUN", events)
     const dateTime = new Date().toISOString()
 
     return (
@@ -20,6 +21,8 @@ export const EventList = (props) => {
                 <h1>Level Up Game Events</h1>
             </header>
             {
+                events
+                ?
                 events.map(event => {
                     return <section key={event.id} className="registration">
                         <div className="registration__game">Game Name: {event.game.name_of_game}</div>
@@ -38,6 +41,7 @@ export const EventList = (props) => {
                         </div>
                     </section>
                 })
+                : <div>loading</div>
             }
         </article >
 

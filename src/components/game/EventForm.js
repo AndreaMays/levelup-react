@@ -7,17 +7,19 @@ import { GameContext } from "./GameProvider"
 export const EventForm = () => {
     const history = useHistory()
 
-    const [currentEvent, setEvent] = useState([])
-    const [createEvent] = useContext(EventContext)
-    const [games, setGames] = useContext(GameContext)
+    const [currentEvent, setEvent] = useState({})
+    const {createEvent} = useContext(EventContext)
+    const {getGames, games} = useContext(GameContext)
 
     useEffect(() => {
-        games()
+        getGames()
     }, [])
+
+    console.log("Playtime", games)
 
     const changeEventState = (domEvent) => {
         const newCurrentEvent = { ...currentEvent }
-        newCurrentEvent.title = domEvent.target.value
+        newCurrentEvent[domEvent.target.id] = domEvent.target.value
         setEvent(newCurrentEvent)
     }
 
@@ -27,13 +29,13 @@ export const EventForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="gameId">Game: </label>
-                    <select name="gameId" className="form-control"
+                    <select name="gameId" className="form-control" id="gameId"
                         value={ currentEvent.gameId }
                         onChange={ changeEventState }>
                         <option value="0">Select a game...</option>
                         {
                             games.map(game => (
-                                <option key={game.id} value={game.id} >Game Label: {game.label}</option>
+                                <option key={game.id} value={game.id} >Game Label: {game.name_of_game}</option>
                             ))
                         }
                     </select>
@@ -43,13 +45,13 @@ export const EventForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="description">Description: </label>
-                    <input name="description" type="text"></input>
+                    <input name="description" type="text" id="description" value={currentEvent.description} ></input>
                 </div>
             </fieldset>
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="date">Date: </label>
-                    <input name="dateTime" type="datetime-local"></input>
+                    <input name="dateTime" type="datetime-local" id="dateTime" value={currentEvent.dateTime} onChange={ changeEventState } ></input>
                 </div>
             </fieldset>
             {/* Create the rest of the input fields */}
@@ -57,7 +59,9 @@ export const EventForm = () => {
             <button type="submit"
                 onClick={evt => {
                     evt.preventDefault()
-
+                    const event = {...currentEvent}
+                    // event.gameId = pareseInt(event.gameId)
+                    
                     // Create the event
                     createEvent(currentEvent)
                         .then(res => history.push('/events'))
