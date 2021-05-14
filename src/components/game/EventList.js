@@ -4,14 +4,14 @@ import { EventContext } from "./EventProvider.js"
 
 
 export const EventList = (props) => {
-    const { getEvents, events } = useContext(EventContext)
+    const { getEvents, events, joinEvent } = useContext(EventContext)
     const history = useHistory()
 
     useEffect(() => {
         getEvents()
     }, [])
 
-    console.log("FUN", events)
+    console.log("EVENTS", events)
     const dateTime = new Date().toISOString()
 
     return (
@@ -39,6 +39,9 @@ export const EventList = (props) => {
                             }
                             @ {new Date(event.dateTime).toTimeString()}
                         </div>
+                        <button className="btn btn-2"
+                        onClick={() => joinEvent(event.id)}>Join</button>
+
                     </section>
                 })
                 : <div>loading</div>
@@ -50,6 +53,8 @@ export const EventList = (props) => {
             history.push({ pathname: "/events/new" })
         }}
     >Create New Game Event </button>
+
+
         </>
     )
 }

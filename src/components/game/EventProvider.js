@@ -6,6 +6,7 @@ export const EventProvider = (props) => {
     const [ events, setEvents ] = useState([])
 
     const getEvents = () => {
+        
         return fetch("http://localhost:8000/events", {
             headers:{
                 "Authorization": `Token ${localStorage.getItem("lu_token")}`
@@ -17,6 +18,7 @@ export const EventProvider = (props) => {
 
     const createEvent = (event) => {
         console.table(event)
+        debugger
         return fetch("http://localhost:8000/events", {
             method: "POST",
             headers: {
@@ -25,11 +27,20 @@ export const EventProvider = (props) => {
             },
             body: JSON.stringify(event)
         })
-            .then(setEvents)
+           
 }
 
+    const joinEvent = eventId => {
+        return fetch(`http://localhost:8000/events/${eventId}/signup`, {
+            method: "POST",
+            headers:{
+                "Authorization": `Token ${localStorage.getItem("lu_token")}`
+            }
+        })
+            .then(response => response.json())
+    }
         return (
-        <EventContext.Provider value={{ events, getEvents, createEvent }} >
+        <EventContext.Provider value={{ events, getEvents, createEvent, joinEvent }} >
             { props.children }
         </EventContext.Provider>
     )

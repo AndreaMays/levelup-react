@@ -15,9 +15,10 @@ export const EventForm = () => {
         getGames()
     }, [])
 
-    console.log("Playtime", games)
+    console.log("GAMES", games)
 
     const changeEventState = (domEvent) => {
+        domEvent.preventDefault()
         const newCurrentEvent = { ...currentEvent }
         newCurrentEvent[domEvent.target.id] = domEvent.target.value
         setEvent(newCurrentEvent)
@@ -45,7 +46,7 @@ export const EventForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="description">Description: </label>
-                    <input name="description" type="text" id="description" value={currentEvent.description} ></input>
+                    <input name="description" type="text" id="description" value={currentEvent.description} onChange={ changeEventState } ></input>
                 </div>
             </fieldset>
             <fieldset>
@@ -60,11 +61,11 @@ export const EventForm = () => {
                 onClick={evt => {
                     evt.preventDefault()
                     const event = {...currentEvent}
-                    // event.gameId = pareseInt(event.gameId)
+                    event.gameId = parseInt(event.gameId)
                     
                     // Create the event
                     createEvent(currentEvent)
-                        .then(res => history.push('/events'))
+                        .then(() => history.push('/events'))
 
                     // Once event is created, redirect user to event list
                 }}
