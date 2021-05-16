@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from "react"
 import { GameContext } from "./GameProvider.js"
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 
 export const GameForm = () => {
     const history = useHistory()
-    const { createGame, getGameTypes, gameTypes } = useContext(GameContext)
+    const { createGame, getGameTypes, gameTypes, getGameById, updateGame } = useContext(GameContext)
+    const { gameId } = useParams()
 
     /*
         Since the input fields are bound to the values of
@@ -26,8 +27,16 @@ export const GameForm = () => {
    useEffect(() => {
        getGameTypes()
     }, [])
+
+    useEffect(() => {
+        if(gameId != null) {
+            getGameById(gameId)
+            .then(setCurrentGame)
+            }
+        })
     
-    console.log("Games", gameTypes)
+    
+    // console.log("Games", gameTypes)
     /*
         REFACTOR CHALLENGE START
 
@@ -96,7 +105,7 @@ export const GameForm = () => {
             <fieldset>
                 <div className="form-group">
                     <label htmlFor="game_type"></label>
-                    <select name="gameTypeId" onChange={changeGameTypeState}>
+                    <select name="gameTypeId" onChange={changeGameTypeState} value={currentGame.gameTypeId}>
                         {
                                gameTypes.map(game_type =>
                                 <option key={game_type.id} value={game_type.id}>Type of Game: {game_type.label}</option>
@@ -141,7 +150,12 @@ export const GameForm = () => {
                         skillLevel: parseInt(currentGame.skillLevel),
                         gameTypeId: parseInt(currentGame.gameTypeId)
                     }
+                    if (gameId) {
+                        game.id = gameId
+                        updateGame(game).then(() => history.push('/'))
+                    } else {
 
+                    }
                     // Send POST request to your API
                     createGame(game)
                         .then(() => history.push("/games"))
